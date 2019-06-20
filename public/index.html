@@ -50,19 +50,57 @@
             render(snap)
         })
 
+        var todos= [];
+        var size = 0;
+
         function render(items)
         {   
           var content;
           var list = [];
-          var size = 0;
           items.forEach((item) =>
           {
-               content = `<li>${item.data().content}</li>`
+               content = `<li>${item.data().content}<button data-id="${size}"> Delete</button></li>`
                list.push(content)
+               todos.push(item.data().content)
                size++;
           })
             todolist.innerHTML = list.join('')
             lenght.innerHTML= size;
+        }
+
+        function render2(items)
+        {
+          var content;
+          var list = [];
+          items.map((item,index)=>
+          {
+              content =  `<li>${item}<button data-id="${index}"> Delete</button></li>`
+              list.push(content);
+          })
+          todolist.innerHTML = list.join('')
+          lenght.innerHTML= size;
+        }
+
+        todolist.addEventListener('click',onClicked);
+
+        function onClicked(event)
+        {
+          var button = event.target;
+          var index =  parseInt(button.dataset.id);
+          todos.splice(index,1);
+          size --;
+          render2(todos)
+          deleteData(index);
+        }
+        // delete todolist
+        function deleteData(index)
+        {
+          var data = db.collection('todos').doc(`a${index}`);
+          data.delete().then(function() {
+              console.log("Document successfully deleted!");
+          }).catch(function(error) {
+              console.error("Error removing document: ", error);
+          });
         }
       });
     </script>

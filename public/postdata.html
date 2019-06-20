@@ -43,20 +43,20 @@
         let postdata = document.getElementById('postdata');
         postdata.addEventListener('click',Adddatabase);
 
+          var index = 0;
         //post data 
         function Adddatabase()
         {
             let inputdata = document.getElementById('input').value
-            db.collection('todos').add({
+            db.collection('todos').doc(`a${index}`).set({
                 content: inputdata
-            }).then((docRef) =>
-            {
-                console.log("Document written with ID: ", docRef.id)
-                document.getElementById('input').value = ''
-            }).catch((error) =>
-            {
-                console.error('Error adding document: ',error)
-            })    
+            }).then(function() {
+                console.log("Document successfully written!");
+                index++;
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+           inputdata ='';
         }
 
       });
